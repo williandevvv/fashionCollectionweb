@@ -20,11 +20,28 @@
   }
 
   // ensure root user
+
   let users = loadUsers();
   if(!users.some(u => u.email === 'root@store.hn')){
     users.push({email:'root@store.hn', password:'root', role:'root'});
     saveUsers(users);
   }
+=======
+const usuarios = cargarUsers();
+const existingRoot = usuarios.find(u => u.email === 'root@store.hn');
+
+if (!existingRoot) {
+  usuarios.push({
+    email: 'root@store.hn',
+    contraseña: 'superuserfs',
+    rol: 'root'
+  });
+  saveUsers(usuarios);
+} else if (existingRoot.contraseña !== 'superuserfs') {
+  existingRoot.contraseña = 'superuserfs';
+  saveUsers(usuarios);
+}
+
 
   // login form
   const loginForm = document.getElementById('login-form');
