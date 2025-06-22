@@ -22,15 +22,16 @@
   // ensure root user
 const usuarios = cargarUsers();
 const existingRoot = usuarios.find(u => u.email === 'root@store.hn');
+
 if (!existingRoot) {
   usuarios.push({
     email: 'root@store.hn',
     contraseña: 'superuserfs',
-    rol: 'root
+    rol: 'root'
   });
   saveUsers(usuarios);
-} else if (existingRoot.password !== 'superuserfs') {
-  existingRoot.password = 'superuserfs';
+} else if (existingRoot.contraseña !== 'superuserfs') {
+  existingRoot.contraseña = 'superuserfs';
   saveUsers(usuarios);
 }
 
