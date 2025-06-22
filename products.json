@@ -1,0 +1,10 @@
+{
+  "categories": [
+    {"name": "Bisutería", "image": "img/bisuteria.jpg", "count": 120, "link": "bisuteria.html"},
+    {"name": "Maquillaje", "image": "img/acrilico.jpeg", "count": 85, "link": "#"},
+    {"name": "Acero", "image": "img/acero.jpg", "count": 45, "link": "#"},
+    {"name": "Acrílico", "image": "img/ofertas.jpeg", "count": 62, "link": "#"},
+    {"name": "Ofertas", "image": "img/maquillaje.jpg", "count": 35, "link": "#"},
+    {"name": "Novedades", "image": "img/ofertas.jpeg", "count": 28, "link": "#"}
+  ]
+}
