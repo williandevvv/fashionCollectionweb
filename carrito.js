@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Variables globales
-    let cartItems = [
-        { id: 1, name: "Collar de Plata", price: 29.99, quantity: 1, image: "assets/bisuteria.jpg" },
-        { id: 2, name: "Reloj de Acero", price: 89.99, quantity: 1, image: "assets/acero.jpg" }
-    ];
+    let cartItems = cartStorage.loadCart();
 
     // Elementos del DOM
     const cartItemsContainer = document.getElementById('cart-items');
@@ -45,11 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Actualizar totales
-        const shipping = 5.99;
-        cartTotalElement.textContent = `$${total.toFixed(2)}`;
-        subtotalElement.textContent = `$${total.toFixed(2)}`;
-        orderTotalElement.textContent = `$${(total + shipping).toFixed(2)}`;
+        const shipping = 0;
+        cartTotalElement.textContent = total.toLocaleString('es-HN', {style:'currency',currency:'HNL'});
+        subtotalElement.textContent = total.toLocaleString('es-HN', {style:'currency',currency:'HNL'});
+        orderTotalElement.textContent = (total + shipping).toLocaleString('es-HN', {style:'currency',currency:'HNL'});
         cartCountElement.textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+        cartStorage.saveCart(cartItems);
     }
 
     // Event listeners
@@ -66,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 item.quantity -= 1;
             }
             
+            cartStorage.saveCart(cartItems);
             renderCart();
         }
         
@@ -73,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('remove-btn') || e.target.closest('.remove-btn')) {
             const id = parseInt(e.target.getAttribute('data-id') || e.target.closest('.remove-btn').getAttribute('data-id'));
             cartItems = cartItems.filter(item => item.id !== id);
+            cartStorage.saveCart(cartItems);
             renderCart();
         }
     });
@@ -81,18 +81,26 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('clear-cart').addEventListener('click', function() {
         if (confirm('¿Estás seguro de vaciar el carrito?')) {
             cartItems = [];
+            cartStorage.saveCart(cartItems);
             renderCart();
         }
     });
 
-    // Procesar pago
+    // Enviar pedido por WhatsApp
     document.getElementById('checkout-btn').addEventListener('click', function() {
         if (cartItems.length === 0) {
             alert('Tu carrito está vacío');
             return;
         }
-        alert('Redirigiendo a pasarela de pago...');
-        // Aquí iría la lógica real de pago
+        const total = cartItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
+        let mensaje = 'Hola, deseo ordenar:\n';
+        cartItems.forEach(i => {
+            mensaje += `- ${i.name} x${i.quantity} - ` +
+              (i.price * i.quantity).toLocaleString('es-HN', {style:'currency',currency:'HNL'}) + '\n';
+        });
+        mensaje += 'Total: ' + total.toLocaleString('es-HN', {style:'currency',currency:'HNL'});
+        const url = 'https://wa.me/50494859196?text=' + encodeURIComponent(mensaje);
+        window.open(url, '_blank');
     });
 
     // Inicializar
