@@ -22,7 +22,7 @@
   // ensure root user
   let users = loadUsers();
   if(!users.some(u => u.email === 'root@store.hn')){
-    users.push({email:'root@store.hn', password:'adminroot', role:'root'});
+    users.push({email:'root@store.hn', password:'root', role:'root'});
     saveUsers(users);
   }
 
