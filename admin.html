@@ -1194,62 +1194,59 @@
             </div>
         </div>
     </div>
-    
     <!-- Add Task Modal -->
     <div class="modal fade" id="addTaskModal" tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <form class="modal-content" id="task-form">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">Nueva Tarea</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class = "modal-body" > ␊ 
-                    <form id = "formulario-de-tarea" >
-                        <div clase = "mb-3" > ␊ 
-                            <label class = "form- label " > Título </label> ␊ 
-                            <tipo de entrada = "texto" id = "título de la tarea"   clase = "control de formulario" requerido > 
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Título</label>
+                        <input id="task-title" type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea id="task-desc" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Acción</label>
+                        <select id="task-action" class="form-select">
+                            <option value="agregar_producto">Agregar Producto</option>
+                            <option value="cambiar_precio">Cambiar Precio</option>
+                            <option value="oferta">Crear Oferta</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Prioridad</label>
+                            <select id="task-priority" class="form-select">
+                                <option value="alta">Alta</option>
+                                <option value="media">Media</option>
+                                <option value="baja">Baja</option>
+                            </select>
                         </div>
-                        
-                        <div clase = "mb-3" > ␊ 
-                            <labelclass="form-label">Descripción</label>␊ 
-                            <textarea id = "descripcion-de-la-tarea"  clase = "control-de-formulario" filas = "3" > </área-de-texto > 
-                        
-                        <div class="row">
-                            <div clase = "col-md-6 mb-3"> ␊ 
-                                <label class = "form-label" > Prioridad </label > ␊ 
-                                <select id = "prioridad de tarea"  clase = "form-select" requerido > 
-                                    <option value = ""> Seleccionar... </option > ␊ 
-                                    <option value = " high "> Alta </option> ␊ 
-                                    <opción valor = "medio" seleccionado > Medios </opción > ␊  
-                                    <option value = " low "> Baja </option> ␊ 
-                                </seleccionar > ␊
-                            ␊​​​
-                            <div clase = "col-md-6 mb-3"> ␊ 
-                                <labelclass="form-label">Fecha Límite</label>␊ 
-                                <input type = "fecha" id = "tarea vencida"   clase = "control de formulario" >
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fecha Límite</label>
-                                <input type="date" class="form-control">
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Fecha Límite</label>
+                            <input id="task-due" type="date" class="form-control">
                         </div>
-                        
-                     <div clase = "mb-3" > ␊ 
-                            <label class = "form-label" > Asignar a </label > ␊ 
-                            <select id = "tarea asignada"  clase = "form-select" requerido > 
-                                <option value = "" > Seleccionar... </option > ␊ 
-                                <option>María González</option>␊
-                                <opción > Carlos Mendoza </opción > ␊
-                                <opción > Ana Rodríguez </opción > ␊
-                            </seleccionar > ␊
-                        ␊​​​
-                    </form> ␊​​
-                ␊​​​
-                <div class = "modal-footer" > ␊ 
-                    <button type = "button" class = "btn btn-secondary" data-bs-dismiss = "modal" > Cancelar </button > ␊   
-                    Crear tarea​​​​​​​​​​​​​​​​​​​    
-            </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Asignar a (email)</label>
+                        <input id="task-assigned" type="email" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear tarea</button>
+                </div>
+            </form>
         </div>
     </div>
+
+    
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -1406,6 +1403,8 @@
     });
   });
 </script>
+<script src="local-auth.js"></script>
+<script src="admin-tareas-funcionales.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>
