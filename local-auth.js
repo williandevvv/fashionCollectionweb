@@ -20,16 +20,20 @@
   }
 
   // ensure root user
-  let users = loadUsers();
-  const existingRoot = users.find(u => u.email === 'root@store.hn');
-  if(!existingRoot){
-    // root user available for offline management
-    users.push({email:'root@store.hn', password:'superuserfs', role:'root'});
-    saveUsers(users);
-  }else if(existingRoot.password !== 'superuserfs'){
-    existingRoot.password = 'superuserfs';
-    saveUsers(users);
-  }
+const usuarios = cargarUsers();
+const existingRoot = usuarios.find(u => u.email === 'root@store.hn');
+
+if (!existingRoot) {
+  usuarios.push({
+    email: 'root@store.hn',
+    contraseña: 'superuserfs',
+    rol: 'root'
+  });
+  saveUsers(usuarios);
+} else if (existingRoot.contraseña !== 'superuserfs') {
+  existingRoot.contraseña = 'superuserfs';
+  saveUsers(usuarios);
+}
 
   // login form
   const loginForm = document.getElementById('login-form');
