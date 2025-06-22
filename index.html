@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías - Fashion Store</title>
+    <!-- Bootstrap CSS básico -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom CSS manteniendo tu estilo original */
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .header {
+            background-color: #000;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .category-card {
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 24px;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)), url('hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .newsletter-section {
+            background-color: #f1f1f1;
+            padding: 60px 0;
+        }
+        
+        footer {
+            background-color: #000;
+            color: white;
+            padding: 40px 0 20px;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header py-2">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand me-5" href="#">
+                        <img src="logo.png" alt="Fashion Store" height="40">
+                    </a>
+                    <nav class="d-none d-md-flex align-items-center">
+                        <a class="text-white text-decoration-none me-5" href="#">Inicio</a>
+                        <a class="text-white text-decoration-none me-5 fw-medium" href="#">Categorías</a>
+                        <a class="text-white text-decoration-none me-5" href="#">Ofertas</a>
+                        <a class="text-white text-decoration-none" href="#">Contacto</a>
+                    </nav>
+                </div>
+                <div class="d-flex align-items-center">
+                    <a href="carrito.html" class="position-relative text-white me-4">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                        <span class="cart-count">3</span>
+                    </a>
+                    <a href="#" class="text-white me-3">
+                        <i class="fas fa-user fa-lg"></i>
+                    </a>
+                    <button class="d-md-none btn text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+                        <i class="fas fa-bars fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Menú móvil -->
+            <div class="collapse d-md-none" id="mobileMenu">
+                <div class="py-3">
+                    <a class="d-block text-white py-2 text-decoration-none" href="#">Inicio</a>
+                    <a class="d-block text-white py-2 text-decoration-none" href="#">Categorías</a>
+                    <a class="d-block text-white py-2 text-decoration-none" href="#">Ofertas</a>
+                    <a class="d-block text-white py-2 text-decoration-none" href="#">Contacto</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title display-4 fw-bold mb-4">Explora nuestras categorías</h1>
+            <p class="fs-5 mb-5">Descubre lo mejor en moda y accesorios</p>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control rounded-pill py-3 px-4" placeholder="Buscar productos...">
+                        <button class="btn btn-dark rounded-pill position-absolute end-0 top-0 bottom-0 m-1" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categorías -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Categoría 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="bisuteria.html" class="category-card d-block" style="background-image: url(img/bisuteria.jpg)">
+                        <div class="category-overlay">
+                            <h3 class="h4 fw-bold mb-2">Bisutería</h3>
+                            <p class="mb-0">120 productos</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Categoría 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="#" class="category-card d-block" style="background-image: url(img/acrilico.jpeg)">
+                        <div class="category-overlay">
+                            <h3 class="h4 fw-bold mb-2">Maquillaje</h3>
+                            <p class="mb-0">85 productos</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Categoría 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="#" class="category-card d-block" style="background-image: url(img/acero.jpg)">
+                        <div class="category-overlay">
+                            <h3 class="h4 fw-bold mb-2">Acero</h3>
+                            <p class="mb-0">45 productos</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Categoría 4 -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="#" class="category-card d-block" style="background-image: url(img/ofertas.jpeg)">
+                        <div class="category-overlay">
+                            <h3 class="h4 fw-bold mb-2">Acrílico</h3>
+                            <p class="mb-0">62 productos</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Categoría 5 -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="#" class="category-card d-block" style="background-image: url(img/maquillaje.jpg)">
+                        <div class="category-overlay">
+                            <h3 class="h4 fw-bold mb-2">Ofertas</h3>
+                            <p class="mb-0">35 productos</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Categoría 6 -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="#" class="category-card d-block" style="background-image: url(img/ofertas.jpeg)">
+                        <div class="category-overlay">
+                            <h3 class="h4 fw-bold mb-2">Novedades</h3>
+                            <p class="mb-0">28 productos</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="display-5 fw-bold mb-3">Suscríbete a nuestro newsletter</h2>
+                    <p class="mb-5">Recibe las últimas novedades y ofertas exclusivas directamente en tu correo.</p>
+                    
+                    <form class="row g-2 justify-content-center">
+                        <div class="col-md-8">
+                            <input type="email" class="form-control form-control-lg" placeholder="Tu correo electrónico">
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Suscribirse</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <h3 class="h5 text-white mb-4">Fashion Store</h3>
+                    <p>La mejor selección en moda y accesorios.</p>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <h3 class="h5 text-white mb-4">Enlaces rápidos</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Inicio</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Productos</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Ofertas</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <h3 class="h5 text-white mb-4">Ayuda</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Envíos</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Devoluciones</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Preguntas frecuentes</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Términos y condiciones</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <h3 class="h5 text-white mb-4">Síguenos</h3>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white-50"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-white-50"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white-50"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white-50"><i class="fab fa-pinterest fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4 bg-secondary">
+            
+            <div class="text-center text-white-50">
+                <p class="mb-0">&copy; 2025 Fashion Collection. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS (para el menú móvil) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script propio -->
+    <script>
+        // Simple animation for category cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const categories = document.querySelectorAll('.category-card');
+            
+            categories.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `all 0.3s ease ${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

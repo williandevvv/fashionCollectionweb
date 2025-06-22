@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil VIP - Honduras Fashion Collection</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary-color: #6a0dad;
+            --secondary-color: #ff6b6b;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --gradient: linear-gradient(135deg, #6a0dad 0%, #2575fc 100%);
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f5f7;
+            color: var(--dark-color);
+            background-image: url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-blend-mode: overlay;
+            background-color: rgba(245, 245, 247, 0.95);
+            min-height: 100vh;
+        }
+        
+        /* [Resto de tus estilos CSS originales...] */
+        
+        /* Nuevos estilos para autenticación */
+        .auth-container {
+            max-width: 500px;
+            margin: 5rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-tabs .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .auth-tabs .nav-link.active {
+            color: var(--primary-color);
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .auth-divider {
+            position: relative;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .auth-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #eee;
+            z-index: 1;
+        }
+        
+        .auth-divider span {
+            position: relative;
+            padding: 0 1rem;
+            background: white;
+            z-index: 2;
+            color: #6c757d;
+        }
+        
+        .btn-google {
+            background: #fff;
+            color: #757575;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-google:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand brand-logo" href="index.html">Honduras Fashion Collection</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categorias.html">Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="carrito.html">Carrito</a>
+                    </li>
+                </ul>
+                
+                <div id="auth-buttons" class="d-flex align-items-center ms-lg-4">
+                    <a href="carrito.html" class="btn btn-outline-light me-2 position-relative">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    </a>
+                    <button class="btn btn-outline-light me-2" onclick="showAuthModal('login')">
+                        <i class="fas fa-sign-in-alt me-1"></i> Ingresar
+                    </button>
+                    <button class="btn btn-light" onclick="showAuthModal('register')">
+                        <i class="fas fa-user-plus me-1"></i> Registrarse
+                    </button>
+                </div>
+                
+                <div id="profile-button" class="dropdown ms-lg-4 d-none">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span id="navbar-username">Usuario</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="perfil.html"><i class="fas fa-user me-2"></i>Mi Perfil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-shopping-bag me-2"></i>Mis Pedidos</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container my-5">
+        <!-- Contenedor del perfil (visible solo cuando el usuario está autenticado) -->
+        <div id="profile-container" class="d-none">
+            <!-- [Aquí va todo el contenido de tu perfil original...] -->
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="profile-card profile-sidebar">
+                        <div class="profile-picture-container">
+                            <img src="https://source.unsplash.com/random/300x300/?portrait" alt="Foto de perfil" class="profile-picture" id="profile-picture">
+                            <input type="file" id="upload-photo" class="upload-photo-input" accept="image/*">
+                            <label for="upload-photo" class="edit-picture-btn">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                        </div>
+                        
+                        <h2 class="profile-name" id="profile-display-name">Willian Sanchez</h2>
+                        <p class="profile-email" id="profile-email-text">willian@example.com</p>
+                        
+                        <div class="sidebar-menu">
+                            <button class="menu-item active" data-tab="profile">
+                                <i class="fas fa-user-circle me-2"></i> Mi Perfil
+                            </button>
+                            <button class="menu-item" data-tab="orders">
+                                <i class="fas fa-shopping-bag me-2"></i> Mis Pedidos
+                            </button>
+                            <button class="menu-item" data-tab="addresses">
+                                <i class="fas fa-map-marker-alt me-2"></i> Direcciones
+                            </button>
+                            <button class="menu-item" data-tab="settings">
+                                <i class="fas fa-cog me-2"></i> Configuración
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenido del Perfil -->
+                <div class="col-lg-9">
+                    <div class="profile-card profile-content">
+                        <!-- Pestaña de Perfil -->
+                        <div id="profile-tab" class="tab-pane">
+                            <!-- [Resto de tu contenido de perfil...] -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contenedor de autenticación (visible cuando el usuario no ha iniciado sesión) -->
+        <div id="auth-container">
+            <div class="auth-container">
+                <ul class="nav nav-tabs auth-tabs" id="authTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-tab-pane" type="button">Iniciar Sesión</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-tab-pane" type="button">Registrarse</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="authTabContent">
+                    <!-- Login Tab -->
+                    <div class="tab-pane fade show active" id="login-tab-pane" role="tabpanel">
+                        <form id="loginForm" class="mt-4">
+                            <div class="mb-3">
+                                <label for="loginEmail" class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="loginEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="loginPassword" required>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Recordar mi sesión</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-sign-in-alt me-1"></i> Ingresar
+                            </button>
+                        </form>
+                        
+                        <div class="auth-divider">
+                            <span>o continuar con</span>
+                        </div>
+                        
+                        <button class="btn btn-google w-100 mb-3">
+                            <i class="fab fa-google me-2"></i> Google
+                        </button>
+                        
+                        <div class="text-center mt-3">
+                            <a href="#" onclick="showPasswordReset()" class="text-primary">¿Olvidaste tu contraseña?</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Register Tab -->
+                    <div class="tab-pane fade" id="register-tab-pane" role="tabpanel">
+                        <form id="registerForm" class="mt-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="registerFirstName" class="form-label">Nombres</label>
+                                    <input type="text" class="form-control" id="registerFirstName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="registerLastName" class="form-label">Apellidos</label>
+                                    <input type="text" class="form-control" id="registerLastName" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerEmail" class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="registerEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPhone" class="form-label">Teléfono (Honduras)</label>
+                                <input type="tel" class="form-control" id="registerPhone" placeholder="+504">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="registerPassword" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="registerPassword" required minlength="6">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="registerConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                                    <input type="password" class="form-control" id="registerConfirmPassword" required minlength="6">
+                                </div>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="acceptTerms" required>
+                                <label class="form-check-label" for="acceptTerms">Acepto los <a href="#" class="text-primary">términos y condiciones</a></label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-user-plus me-1"></i> Registrarse
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Restablecer Contraseña -->
+    <div class="modal fade" id="passwordResetModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Restablecer Contraseña</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="passwordResetForm">
+                        <div class="mb-3">
+                            <label for="resetEmail" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="resetEmail" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-key me-1"></i> Enviar Instrucciones
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script>
+        // Configuración de Firebase - Reemplaza con tus credenciales
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyALIysPS2dr3q7NpxOUA_OksGroK86IV7I",
+  authDomain: "fashiontest-18b1d.firebaseapp.com",
+  projectId: "fashiontest-18b1d",
+  storageBucket: "fashiontest-18b1d.firebasestorage.app",
+  messagingSenderId: "816326052376",
+  appId: "1:816326052376:web:ded94e0df8f8e6279b116d",
+  measurementId: "G-PP4NFB4WJY"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+        
+        // Referencias a elementos del DOM
+        const authContainer = document.getElementById('auth-container');
+        const profileContainer = document.getElementById('profile-container');
+        const authButtons = document.getElementById('auth-buttons');
+        const profileButton = document.getElementById('profile-button');
+        const navbarUsername = document.getElementById('navbar-username');
+        const profileDisplayName = document.getElementById('profile-display-name');
+        const profileEmailText = document.getElementById('profile-email-text');
+        const profilePicture = document.getElementById('profile-picture');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const passwordResetForm = document.getElementById('passwordResetForm');
+        const passwordResetModal = new bootstrap.Modal(document.getElementById('passwordResetModal'));
+        
+        // Observador de estado de autenticación
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Usuario ha iniciado sesión
+                authContainer.classList.add('d-none');
+                profileContainer.classList.remove('d-none');
+                authButtons.classList.add('d-none');
+                profileButton.classList.remove('d-none');
+                
+                // Actualizar información del usuario en la interfaz
+                navbarUsername.textContent = user.displayName || user.email.split('@')[0];
+                profileDisplayName.textContent = user.displayName || user.email.split('@')[0];
+                profileEmailText.textContent = user.email;
+                
+                // Cargar datos adicionales del usuario desde Firestore
+                loadUserData(user.uid);
+            } else {
+                // Usuario no ha iniciado sesión
+                authContainer.classList.remove('d-none');
+                profileContainer.classList.add('d-none');
+                authButtons.classList.remove('d-none');
+                profileButton.classList.add('d-none');
+            }
+        });
+        
+        // Función para cargar datos adicionales del usuario
+        function loadUserData(userId) {
+            db.collection("users").doc(userId).get().then((doc) => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    // Actualizar la interfaz con los datos del usuario
+                    if (userData.photoURL) {
+                        profilePicture.src = userData.photoURL;
+                    }
+                    if (userData.displayName) {
+                        navbarUsername.textContent = userData.displayName;
+                        profileDisplayName.textContent = userData.displayName;
+                    }
+                }
+            }).catch((error) => {
+                console.log("Error al obtener datos del usuario:", error);
+            });
+        }
+        
+        // Manejar inicio de sesión
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = loginForm['loginEmail'].value;
+            const password = loginForm['loginPassword'].value;
+            const rememberMe = loginForm['rememberMe'].checked;
+            
+            auth.setPersistence(firebase.auth.Auth.Persistence[rememberMe ? 'LOCAL' : 'SESSION'])
+                .then(() => {
+                    return auth.signInWithEmailAndPassword(email, password);
+                })
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Bienvenido!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message
+                    });
+                });
+        });
+        
+        // Manejar registro de usuario
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = registerForm['registerEmail'].value;
+            const password = registerForm['registerPassword'].value;
+            const firstName = registerForm['registerFirstName'].value;
+            const lastName = registerForm['registerLastName'].value;
+            const phone = registerForm['registerPhone'].value;
+            
+            if (registerForm['registerPassword'].value !== registerForm['registerConfirmPassword'].value) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Las contraseñas no coinciden'
+                });
+                return;
+            }
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Guardar información adicional en Firestore
+                    return db.collection("users").doc(userCredential.user.uid).set({
+                        uid: userCredential.user.uid,
+                        displayName: `${firstName} ${lastName}`,
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        phone: phone,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro exitoso!',
+                        text: 'Tu cuenta ha sido creada correctamente'
+                    });
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message
+                    });
+                });
+        });
+        
+        // Manejar restablecimiento de contraseña
+        passwordResetForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = passwordResetForm['resetEmail'].value;
+            
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Correo enviado',
+                        text: 'Hemos enviado un correo con las instrucciones para restablecer tu contraseña'
+                    });
+                    passwordResetModal.hide();
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'good',
+                        text: error.message
+                    });
+                });
+        });
+        
+        // Manejar cierre de sesión
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sesión cerrada',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+        });
+        
+        // Funciones auxiliares
+        function showAuthModal(tab) {
+            const authTab = new bootstrap.Tab(document.getElementById(`${tab}-tab`));
+            authTab.show();
+        }
+        
+        function showPasswordReset() {
+            passwordResetModal.show();
+        }
+        
+        // Cambio de pestañas del perfil
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    tabPanes.forEach(pane => pane.classList.add('d-none'));
+                    
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId + '-tab').classList.remove('d-none');
+                });
+            });
+            
+            // Upload de foto de perfil
+            document.getElementById('upload-photo').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Aquí implementarías la subida a Firebase Storage
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Subiendo imagen...',
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    // Simulación de subida (reemplazar con Firebase Storage)
+                    setTimeout(() => {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            document.getElementById('profile-picture').src = event.target.result;
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Foto actualizada',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
