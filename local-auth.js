@@ -22,6 +22,18 @@
   // ensure root user
 
   let users = loadUsers();
+  const existingRoot = users.find(u => u.email === 'root@store.hn');
+  if(!existingRoot){
+    // root user available for offline management
+    users.push({email:'root@store.hn', password:'superuserfs', role:'root'});
+    saveUsers(users);
+  }else if(existingRoot.password !== 'superuserfs'){
+    existingRoot.password = 'superuserfs';
+    saveUsers(users);
+  }
+=======
+
+  let users = loadUsers();
   if(!users.some(u => u.email === 'root@store.hn')){
     users.push({email:'root@store.hn', password:'root', role:'root'});
     saveUsers(users);
@@ -41,6 +53,7 @@ if (!existingRoot) {
   existingRoot.contraseña = 'superuserfs';
   saveUsers(usuarios);
 }
+
 
 
   // login form

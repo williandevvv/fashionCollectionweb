@@ -33,7 +33,7 @@ if (localUser) {
 
 // Add task logic
 const taskForm = document.getElementById('task-form');
-if (taskForm) {
+if (taskForm && typeof firebase !== 'undefined') {
     taskForm.addEventListener('submit', async e => {
         e.preventDefault();
         if (userRole !== 'admin' && userRole !== 'root') {
