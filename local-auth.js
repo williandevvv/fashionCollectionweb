@@ -31,6 +31,8 @@
     existingRoot.password = 'superuserfs';
     saveUsers(users);
   }
+
+=======
 =======
 
   let users = loadUsers();
@@ -53,6 +55,7 @@ if (!existingRoot) {
   existingRoot.contraseña = 'superuserfs';
   saveUsers(usuarios);
 }
+
 
 
 

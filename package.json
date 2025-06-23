@@ -8,6 +8,10 @@
     "start": "node server.js",
     "test": "node test.js"
 =======
+
+    "start": "node server.js",
+    "test": "node test.js"
+=======
 "scripts": {
   "start": "node server.js",
   "test": "node test.js"
@@ -15,7 +19,6 @@
 "dependencies": {
   "express": "^4.18.2"
 }
-
 
   }
 }

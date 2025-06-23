@@ -1,4 +1,3 @@
-
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -61,7 +60,7 @@ if (require.main === module) {
 } else {
   module.exports = startServer;
 }
-=======
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
