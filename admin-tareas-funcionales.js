@@ -1,8 +1,4 @@
-// Simulación de usuario actual (reemplazar por sistema de login real)
-const usuarioActual = {
-  nombre: "Carlos",
-  rol: "superadmin" // puede ser "admin", "editor", etc.
-};
+const usuarioActual = localAuth.getCurrentUser() || { rol: 'invitado' };
 
 // Cargar tareas desde localStorage o iniciar vacío
 let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
@@ -44,7 +40,7 @@ function renderTareas() {
 function ejecutarTarea(id) {
   const tarea = tareas.find(t => t.id === id);
 
-  if (tarea.requierePermiso && usuarioActual.rol !== "superadmin") {
+  if (tarea.requierePermiso && usuarioActual.rol !== "root" && usuarioActual.rol !== "admin") {
     return alert("No tienes permisos para esta acción.");
   }
 
@@ -67,3 +63,42 @@ function ejecutarTarea(id) {
 
 // Inicializar al cargar
 renderTareas();
+
+const taskFormEl = document.getElementById('task-form');
+if (taskFormEl) {
+  taskFormEl.addEventListener('submit', e => {
+    e.preventDefault();
+    if (usuarioActual.rol !== 'admin' && usuarioActual.rol !== 'root') {
+      alert('No tienes permisos para crear tareas');
+      return;
+    }
+    const newTask = {
+      id: Date.now().toString(),
+      descripcion: document.getElementById('task-title').value,
+      prioridad: document.getElementById('task-priority').value,
+      asignadoA: document.getElementById('task-assigned').value,
+      accion: document.getElementById('task-action').value,
+      requierePermiso: true,
+      estado: 'pendiente'
+    };
+    tareas.push(newTask);
+    localStorage.setItem('tareas', JSON.stringify(tareas));
+    renderTareas();
+    bootstrap.Modal.getInstance(document.getElementById('addTaskModal')).hide();
+    taskFormEl.reset();
+  });
+}
+
+function grantPermission(email, role) {
+  if (usuarioActual.rol !== 'root') {
+    alert('Solo el usuario root puede asignar roles');
+    return;
+  }
+  const users = localAuth.loadUsers();
+  const user = users.find(u => u.email === email);
+  if (user) {
+    user.role = role;
+    localAuth.saveUsers(users);
+    alert('Permiso actualizado');
+  }
+}

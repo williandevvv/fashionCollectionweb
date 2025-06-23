@@ -3,7 +3,14 @@
 
 let userRole = null;
 
-if (typeof firebase !== 'undefined') {
+// Permitir también autenticación local
+const localUser = window.localAuth ? localAuth.getCurrentUser() : null;
+if (localUser) {
+    userRole = localUser.role;
+    if (userRole !== 'admin' && userRole !== 'root') {
+        window.location.href = 'login.html';
+    }
+} else if (typeof firebase !== 'undefined') {
     firebase.auth().onAuthStateChanged(async user => {
         if (!user) {
             window.location.href = 'login.html';
@@ -20,14 +27,16 @@ if (typeof firebase !== 'undefined') {
             window.location.href = 'login.html';
         }
     });
+} else {
+    window.location.href = 'login.html';
 }
 
 // Add task logic
 const taskForm = document.getElementById('task-form');
-if (taskForm) {
+if (taskForm && typeof firebase !== 'undefined') {
     taskForm.addEventListener('submit', async e => {
         e.preventDefault();
-        if (userRole !== 'admin') {
+        if (userRole !== 'admin' && userRole !== 'root') {
             alert('No tienes permisos para crear tareas');
             return;
         }

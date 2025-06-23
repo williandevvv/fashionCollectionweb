@@ -1,0 +1,10 @@
+{
+  "name": "fashion-collection-webapp",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  }
+}

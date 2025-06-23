@@ -5,6 +5,8 @@ const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
 let currentUserRole = null;
 
+const usingLocalAuth = typeof window.localAuth !== 'undefined';
+
 // Monitor authentication state
 if (typeof firebase !== 'undefined') {
     firebase.auth().onAuthStateChanged(async user => {
@@ -27,7 +29,7 @@ if (typeof firebase !== 'undefined') {
 }
 
 // Handle login form submission
-if (loginForm) {
+if (loginForm && !usingLocalAuth) {
     loginForm.addEventListener('submit', async e => {
         e.preventDefault();
         const email = document.getElementById('login-email').value;
@@ -41,7 +43,7 @@ if (loginForm) {
 }
 
 // Handle registration form submission
-if (registerForm) {
+if (registerForm && !usingLocalAuth) {
     registerForm.addEventListener('submit', async e => {
         e.preventDefault();
         const email = document.getElementById('register-email').value;
