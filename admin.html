@@ -1344,14 +1344,14 @@
                             beginAtZero: true
                         }
                     }
-                }
+                }  
             });
         });
         
         // Task Drag and Drop Functionality (simplified)
         document.querySelectorAll('.tasks-list').forEach(list => {
             list.addEventListener('dragover', (e) => {
-                e.preventDefault();
+                e.preventDefault(); 
                 const afterElement = getDragAfterElement(list, e.clientY);
                 const draggable = document.querySelector('.dragging');
                 if (afterElement == null) {
@@ -1377,6 +1377,15 @@
         }
 </script>
       
+  // Funcionalidad de cierre de sesión
+  
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    auth.signOut().then(() => {
+      window.location.href = "login.html";
+    });
+  });
+</script>
+
 <script src="local-auth.js"></script>
 <script src="admin-tareas-funcionales.js"></script>
 <script src="admin.js"></script>
